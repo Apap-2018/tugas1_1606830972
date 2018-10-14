@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<title>Home</title>
+		<object th:include="fragments/fragment :: css" th:remove="tag"></object>
+		<object th:include="fragments/fragment :: js" th:remove="tag"></object>
+	</head>
+	<body>
+		<nav th:replace="fragments/fragment :: navbar"></nav>
+		
+		<div class="container-fluid">
+			<h2>Sistem Informasi Kepegawaian</h2>
+			<h4>Selamat datang di Sistem Informasi Kepegawaian</h4>
+			<br>
+			<hr>
+			<h1>Lihat Data Pegawai berdasarkan NIP</h1>
+			<h4>Masukkan Nomor Induk Pegawai</h4>
+			<form th:action="@{/pegawai}" method="GET">
+				<input type="text" name="pegawaiNip" class="form-control"/>
+				<button type="submit" class="btn btn-primary">Cari</button>
+			</form>
+			
+			<!-- <div class="row">
+				<div class="col-md-6">
+					<div class="card">
+						<div class="card-header">
+							Tambah Dealer
+						</div>
+						<div class="card-body">
+							<p class="card-text">Fitur untuk menambah dealer.</p>
+							<a class="btn btn-primary" th:href="@{dealer/add}">Tambah</a>
+						</div>
+					</div>
+				</div>
+			</div>
+			<br>
+			<div class="row">
+				<div class="col-md-6">
+					<div class="card">
+						<div class="card-header">
+							Cari Dealer Berdasarkan Id
+						</div>
+						<form th:action="@{/dealer/view}" method="GET">
+							<div class="card-body">
+								<label for="dealerId">ID Dealer</label>
+								<input type="text" name="dealerId" class="form-control"/>
+								<button type="submit" class="btn btn-primary">Cari</button>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div> -->
+		</div>
+	</body>
+</html>
