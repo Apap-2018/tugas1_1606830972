@@ -1,7 +1,10 @@
 package com.apap.tugas1.controller;
 
+import com.apap.tugas1.model.InstansiModel;
+import com.apap.tugas1.model.JabatanModel;
 import com.apap.tugas1.model.JabatanPegawaiModel;
 import com.apap.tugas1.model.PegawaiModel;
+import com.apap.tugas1.model.ProvinsiModel;
 import com.apap.tugas1.service.*;
 
 import java.util.List;
@@ -22,8 +25,19 @@ public class PegawaiController {
 	@Autowired
 	private JabatanPegawaiService jabatanPegawaiService;
 	
+	@Autowired
+	private ProvinsiService provinsiService;
+	
+	@Autowired
+	private InstansiService instansiService;
+	
+	@Autowired
+	private JabatanService jabatanService;
+	
 	@RequestMapping("/")
-	private String home() {
+	private String home(Model model) {
+		List<JabatanModel> listJabatan = jabatanService.getAll();
+		model.addAttribute("listJabatan", listJabatan);
 		return "home";
 	}
 	
@@ -31,7 +45,14 @@ public class PegawaiController {
 	private String viewPegawai(@RequestParam(value="pegawaiNip") String nip, Model model) {
 		PegawaiModel pegawai = pegawaiService.getPegawaiByNIP(Long.parseLong(nip)).get();
 		List<JabatanPegawaiModel> jabatanPegawai = jabatanPegawaiService.getJabatanByNip(nip).get();
-		
+		double gaji = 0.0;
+		for(JabatanPegawaiModel jabatans : jabatanPegawai) {
+			if (jabatans.getJabatan().getGaji_pokok() > gaji) {
+				gaji=jabatans.getJabatan().getGaji_pokok();
+			}
+		}
+		gaji += pegawai.getInstansi().getProvinsi().getPresentase_tunjangan()/100 * gaji;
+		model.addAttribute("gaji", (long)gaji);
 		model.addAttribute("pegawai", pegawai);
 		model.addAttribute("jabatanPegawai", jabatanPegawai);
 		return "view-pegawai";
@@ -41,13 +62,18 @@ public class PegawaiController {
 	@RequestMapping("/pegawai/tambah")
 	private String tambahPegawai(Model model) {
 		PegawaiModel pegawai = new PegawaiModel();
+		List<ProvinsiModel> listProvinsi = provinsiService.getAllProvinsi();
+		List<InstansiModel> listInstansi = instansiService.getAllInstansi();
 		model.addAttribute("pegawai", pegawai);
+		model.addAttribute("listProvinsi", listProvinsi);
+		model.addAttribute("listInstansi", listInstansi);
 		return "add-pegawai";
 		
 	}
 	
 	@RequestMapping(value="/pegawai/tambah", method=RequestMethod.POST)
 	private String tambahPegawaiSubmit(@ModelAttribute PegawaiModel pegawai, Model model) {
+		pegawai.setNip("");
 		pegawaiService.addPegawai(pegawai);
 		model.addAttribute("pegawai", pegawai);
 		return "add";

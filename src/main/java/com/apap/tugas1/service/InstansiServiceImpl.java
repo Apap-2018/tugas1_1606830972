@@ -25,6 +25,12 @@ public class InstansiServiceImpl implements InstansiService{
 		return InstansiDb.findById(id);
 	}
 
+	@Override
+	public List<InstansiModel> getAllInstansi() {
+		// TODO Auto-generated method stub
+		return InstansiDb.findAll();
+	}
+
 	
 	
 

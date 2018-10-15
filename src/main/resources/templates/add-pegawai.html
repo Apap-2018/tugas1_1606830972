@@ -10,9 +10,57 @@
 		
 		<div class="container-fluid">
 			<h2>Tambah Pegawai</h2>
-			<form th:action="@{/pegawai/tambah}" method="POST">
-				<input type="text" name="pegawaiNip" class="form-control"/>
-				<button type="submit" class="btn btn-primary">Cari</button>
+			<form th:action="@{/pegawai/tambah}" th:object=${pegawai} method="POST">
+				<table>
+					<tr>
+						<td>Nama</td>
+						<td><input type="text" name="nama" class="form-control"/></td>
+					</tr>
+					<tr>
+						<td>Tempat Lahir</td>
+						<td><input type="text" name="tempat_lahir" class="form-control"/></td>
+					</tr>
+					<tr>
+						<td>Tanggal Lahir</td>
+						<td><input type="date" name="tanggal_lahir" class="form-control"/></td>
+					</tr>
+					<tr>
+						<td>Tahun Masuk</td>
+						<td><input type="text" name="tahun_masuk" class="form-control"/></td>
+					</tr>
+					<tr>
+		                <td>Provinsi</td>
+		                <td>
+		                    <select th:field="*{id}">
+							<option th:each="provinsi : ${listProvinsi}" 
+							          th:value="${provinsi.id}" 
+							          th:text="${provinsi.nama}"></option>
+							</select>
+		                </td>
+		            </tr>
+		            <tr>
+		                <td>Nama Instansi</td>
+		                <td>
+		                    <select th:field="*{id}">
+							<option th:each="instansi : ${listInstansi}" 
+							          th:value="${instansi.id}" 
+							          th:text="${instansi.nama}"></option>
+							</select>
+		                </td>
+		            </tr>
+		            <tr>
+		                <td><button type="submit" class="btn btn-primary">Tambah</button><td>
+		            </tr>
+				</table>
+				<!-- <input type="text" name="nama" class="form-control"/>
+				<input type="text" name="tempat_lahir" class="form-control"/>
+				<input type="text" name="tanggal_lahir" class="form-control"/>
+				<input type="text" name="tahun_masuk" class="form-control"/> -->
+				
+				<!-- <input type="text" name="provinsi" class="form-control"/>
+				<input type="text" name="instansi" class="form-control"/>
+				<input type="text" name="jabatan" class="form-control"/> -->
+				<!-- <button type="submit" class="btn btn-primary">Tambah</button> -->
 			</form>
 		</div>
 	</body>
