@@ -1,8 +1,10 @@
 package com.apap.tugas1.service;
 
+import com.apap.tugas1.model.InstansiModel;
 import com.apap.tugas1.model.PegawaiModel;
 import com.apap.tugas1.repository.*;
 
+import java.util.List;
 import java.util.Optional;
 
 import javax.transaction.Transactional;
@@ -26,6 +28,20 @@ public class PegawaiServiceImpl implements PegawaiService{
 	public void addPegawai(PegawaiModel Pegawai) {
 		// TODO Auto-generated method stub
 		PegawaiDb.save(Pegawai);
+	}
+
+	@Override
+	public PegawaiModel pegawaiTertua(InstansiModel instansi) {
+		// TODO Auto-generated method stub
+		List<PegawaiModel> listPegawai = PegawaiDb.findByInstansiOrderByTanggalLahirAsc(instansi);
+		return listPegawai.get(0);
+	}
+
+	@Override
+	public PegawaiModel pegawaiTermuda(InstansiModel instansi) {
+		// TODO Auto-generated method stub
+		List<PegawaiModel> listPegawai = PegawaiDb.findByInstansiOrderByTanggalLahirAsc(instansi);
+		return listPegawai.get(listPegawai.size()-1);
 	}
 
 }

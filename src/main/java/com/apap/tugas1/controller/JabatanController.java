@@ -1,5 +1,7 @@
 package com.apap.tugas1.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -7,6 +9,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.apap.tugas1.model.JabatanModel;
 import com.apap.tugas1.service.JabatanService;
@@ -50,5 +53,17 @@ public class JabatanController {
 		jabatanService.addJabatan(jabatan);
 		model.addAttribute("jabatan", jabatan);
 		return "ubah";
+	}
+	
+	@RequestMapping(value="/jabatan/viewall")
+	private String viewAllJabatan(Model model) {
+		List<JabatanModel> listJabatan = jabatanService.getAll();
+		model.addAttribute("listJabatan", listJabatan);
+		return "viewall-jabatan";
+	}
+	
+	@RequestMapping(path="/alljabatan", method=RequestMethod.GET)
+	public @ResponseBody List<JabatanModel> getAllJabatan(){
+		return jabatanService.getAll();
 	}
 }
