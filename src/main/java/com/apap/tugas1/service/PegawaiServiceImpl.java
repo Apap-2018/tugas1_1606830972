@@ -1,6 +1,7 @@
 package com.apap.tugas1.service;
 
 import com.apap.tugas1.model.InstansiModel;
+import com.apap.tugas1.model.JabatanModel;
 import com.apap.tugas1.model.PegawaiModel;
 import com.apap.tugas1.repository.*;
 
@@ -43,5 +44,11 @@ public class PegawaiServiceImpl implements PegawaiService{
 		List<PegawaiModel> listPegawai = PegawaiDb.findByInstansiOrderByTanggalLahirAsc(instansi);
 		return listPegawai.get(listPegawai.size()-1);
 	}
+
+//	@Override
+//	public JabatanModel getAllJabatan() {
+//		// TODO Auto-generated method stub
+//		return PegawaiDb.;
+//	}
 
 }

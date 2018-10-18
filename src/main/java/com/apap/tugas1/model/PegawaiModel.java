@@ -3,6 +3,7 @@ package com.apap.tugas1.model;
 import java.io.Serializable;
 import java.math.BigInteger;
 import java.sql.Date;
+import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -118,6 +119,17 @@ public class PegawaiModel implements Serializable{
 	@JsonIgnore
 	private InstansiModel instansi;
 
-	/*@OneToMany(mappedBy="pegawai", fetch=FetchType.LAZY, cascade= CascadeType.PERSIST)
-	private JabatanModel jabatan;*/
+	@OneToMany(mappedBy="pegawai", fetch=FetchType.LAZY)
+	@OnDelete(action= OnDeleteAction.CASCADE)
+	private List<JabatanPegawaiModel> jabatan;
+
+	public List<JabatanPegawaiModel> getJabatan() {
+		return jabatan;
+	}
+
+	public void setJabatan(List<JabatanPegawaiModel> jabatan) {
+		this.jabatan = jabatan;
+	}
+	
+	
 }

@@ -42,4 +42,14 @@ public class JabatanServiceImpl implements JabatanService{
 		return JabatanDb.findAll();
 	}
 
+	@Override
+	public void updateJabatan(JabatanModel jabatan, Long jabatanId) {
+		// TODO Auto-generated method stub
+		JabatanModel jabatanUpdate = JabatanDb.getOne(jabatanId);
+		jabatanUpdate.setNama(jabatan.getNama());
+		jabatanUpdate.setGaji_pokok(jabatan.getGaji_pokok());
+		jabatanUpdate.setDeskripsi(jabatan.getDeskripsi());
+		JabatanDb.save(jabatanUpdate);
+	}
+
 }

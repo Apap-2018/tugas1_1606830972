@@ -24,12 +24,14 @@
 			</tr>
 		</table>
 		
-		<form th:action="@{'/jabatan/ubah?jabatanId=' + ${jabatan.id}}" method="GET">
+		<form th:action="@{'/jabatan/ubah'}" method="GET">
+			<input type="hidden" th:value="${jabatan.id}" name="jabatanId" />
 			<button value="submit">Ubah</button>
 		</form>
 		
-		<!-- <form th:action="@{'/jabatan/hapus'}">
+		<form th:action="@{'/jabatan/hapus'}" method="POST">
+			<input type="hidden" th:value="${jabatan.id}" name="jabatanId" />
 			<button value="submit">Hapus</button>
-		</form> -->
+		</form>
 	</body>
 </html>

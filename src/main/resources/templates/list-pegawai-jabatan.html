@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="utf-8" />
+	<title th:replace="fragments/fragment :: headerFragment('View Jabatan Pegawai')"></title>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+	<link rel="stylesheet" href="https://cdn.datatables.net/1.10.12/css/jquery.dataTables.min.css">
+	<script src="https://cdn.datatables.net/1.10.12/js/jquery.dataTables.min.js"></script>
+	<object th:include="fragments/fragment :: css" th:remove="tag"></object>
+	<object th:include="fragments/fragment :: js" th:remove="tag"></object>
+</head>
+
+<body>
+	<nav th:replace="fragments/fragment :: navbar"></nav>
+	<h1>Tabel Pegawai Jabatan</h1>
+	<div>
+		<table id="tablePegawaiJabatan" class="display">
+      
+       <!-- Header Table -->
+       <thead>
+            <tr>
+                <th>Jabatan</th>
+				<th>Jumlah Pegawai</th>
+            </tr>
+        </thead>
+        <tbody>
+	        <tr th:each="jabatan : ${listJabatan}">
+	        	<td th:text="${jabatan.jabatan.nama}"></td>
+	        	<td th:text="${jabatan.pegawai.size}"></td>
+	        </tr>
+        </tbody>
+        <!-- Footer Table -->
+    </table>
+	</div>
+    
+</body>
+<script>
+	$(document).ready( function () {
+	    $('#tablePegawaiJabatan').DataTable();
+	} );
+</script>
+</html>

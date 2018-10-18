@@ -12,4 +12,7 @@ import com.apap.tugas1.model.JabatanPegawaiModel;
 public interface JabatanPegawaiDb extends JpaRepository<JabatanPegawaiModel,Long>{
 	Optional<List<JabatanPegawaiModel>> findAllByPegawai_Nip(String nip);
 
+	List<JabatanPegawaiModel> findAllByJabatan_Id(Long id);
+	
+	/*List<JabatanPegawaiModel> findAllByJabatan();*/
 }

@@ -11,6 +11,7 @@
 		<div class="container-fluid">
 			<h2>Ubah Jabatan</h2>
 			<form th:action="@{/jabatan/ubah}" th:object=${jabatan} method="POST">
+				<input type="hidden" name = "id" th:value="${jabatan.id}">
 				<table>
 					<tr>
 						<td>Nama</td>

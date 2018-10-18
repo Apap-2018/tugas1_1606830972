@@ -3,6 +3,7 @@ package com.apap.tugas1.service;
 import java.util.Optional;
 
 import com.apap.tugas1.model.InstansiModel;
+import com.apap.tugas1.model.JabatanModel;
 import com.apap.tugas1.model.PegawaiModel;
 
 public interface PegawaiService {
@@ -13,5 +14,7 @@ public interface PegawaiService {
 	PegawaiModel pegawaiTertua(InstansiModel instansi);
 	
 	PegawaiModel pegawaiTermuda(InstansiModel instansi);
+	
+//	JabatanModel getAllJabatan();
 
 }

@@ -1,6 +1,7 @@
 package com.apap.tugas1.controller;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -12,12 +13,21 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.apap.tugas1.model.JabatanModel;
+import com.apap.tugas1.model.JabatanPegawaiModel;
+import com.apap.tugas1.service.JabatanPegawaiService;
 import com.apap.tugas1.service.JabatanService;
+import com.apap.tugas1.service.PegawaiService;
 
 @Controller
 public class JabatanController {
 	@Autowired
 	private JabatanService jabatanService;
+	
+	@Autowired 
+	private JabatanPegawaiService jpService;
+	
+	@Autowired
+	private PegawaiService pegawaiService;
 	
 	@RequestMapping(value = "/jabatan/tambah")
 	private String tambahJabatan(Model model) {
@@ -50,7 +60,7 @@ public class JabatanController {
 
 	@RequestMapping(value="/jabatan/ubah", method=RequestMethod.POST)
 	private String ubahJabatanSubmit(@ModelAttribute JabatanModel jabatan, Model model) {
-		jabatanService.addJabatan(jabatan);
+		jabatanService.updateJabatan(jabatan, jabatan.getId());
 		model.addAttribute("jabatan", jabatan);
 		return "ubah";
 	}
@@ -66,4 +76,26 @@ public class JabatanController {
 	public @ResponseBody List<JabatanModel> getAllJabatan(){
 		return jabatanService.getAll();
 	}
+	
+	@RequestMapping(value="/jabatan/hapus", method=RequestMethod.POST)
+	private String hapusJabatan(String jabatanId) {
+		JabatanModel jabatan = jabatanService.getJabatanById(Long.parseLong(jabatanId)).get();
+		System.out.println(jabatan);
+		List<JabatanPegawaiModel> listPegawai = jpService.getPegawaiById(Long.parseLong(jabatanId));
+		System.out.println(listPegawai);
+		if(listPegawai.isEmpty()) {
+			jabatanService.deleteJabatan(jabatan);
+			return "delete";
+		}
+		else {
+			return "undone-delete";
+		}
+	}
+	
+//	@RequestMapping(value="/pegawai-jabatan")
+//	private String pegawaiSiJabatan(Model model) {
+//		List<PegawaiModel> listJabatan = pegawaiService.
+//		model.addAttribute("listJabatan", listJabatan);
+//		return "list-pegawai-jabatan";
+//	}
 }

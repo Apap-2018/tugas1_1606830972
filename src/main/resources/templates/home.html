@@ -20,6 +20,18 @@
 				<button type="submit" class="btn btn-primary">Cari</button>
 			</form>
 			<hr>
+			<h1>Lihat Detail Jabatan</h1>
+			<h4>Pilih Jabatan</h4>
+			<form th:action="@{/jabatan/view}" method="GET">
+				<!-- <input type="text" name="jabatanId" class="form-control"/> -->
+				<select name="jabatanId">
+					<option th:each="jabatan : ${listJabatan}" 
+				          th:value="${jabatan.id}" 
+				          th:text="${jabatan.nama}"></option>
+				</select>
+				<button type="submit" class="btn btn-primary">Cari</button>
+			</form>
+			<hr>
 			<h1>Lihat Pegawai Tertua dan Termuda</h1>
 			<h4>Pilih Instansi</h4>
 			<form th:action="@{/pegawai/termuda-tertua}" method="GET">
