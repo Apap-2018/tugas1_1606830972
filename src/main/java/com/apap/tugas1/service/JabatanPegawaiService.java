@@ -10,5 +10,7 @@ public interface JabatanPegawaiService {
 	List<JabatanPegawaiModel> getPegawaiById(Long id);
 	
 	/*List<JabatanPegawaiModel> getAllJabatan();*/
+	
+	void addJabatanPegawai(JabatanPegawaiModel jabatanPegawai);
 
 }

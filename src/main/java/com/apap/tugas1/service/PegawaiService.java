@@ -16,5 +16,9 @@ public interface PegawaiService {
 	PegawaiModel pegawaiTermuda(InstansiModel instansi);
 	
 //	JabatanModel getAllJabatan();
+	
+	String generateNip(PegawaiModel pegawai);
+	
+	void updatePegawai(PegawaiModel pegawai);
 
 }

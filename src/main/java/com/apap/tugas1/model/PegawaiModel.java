@@ -46,7 +46,7 @@ public class PegawaiModel implements Serializable{
 	}
 
 	public void setNip(String nip) {
-		nip= nip;
+		this.nip= nip;
 	}
 
 	public String getNama() {
@@ -74,11 +74,11 @@ public class PegawaiModel implements Serializable{
 	}
 
 	public String getTahun_masuk() {
-		return tahun_masuk;
+		return tahunMasuk;
 	}
 
 	public void setTahun_masuk(String tahun_masuk) {
-		this.tahun_masuk = tahun_masuk;
+		this.tahunMasuk = tahun_masuk;
 	}
 
 	public InstansiModel getInstansi() {
@@ -111,7 +111,7 @@ public class PegawaiModel implements Serializable{
 	@NotNull
 	@Size(max=255)
 	@Column(name="tahun_masuk",nullable=false)
-	private String tahun_masuk;
+	private String tahunMasuk;
 	
 	@ManyToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name="id_instansi",referencedColumnName="id", nullable=false)
@@ -121,6 +121,7 @@ public class PegawaiModel implements Serializable{
 
 	@OneToMany(mappedBy="pegawai", fetch=FetchType.LAZY)
 	@OnDelete(action= OnDeleteAction.CASCADE)
+	@JsonIgnore
 	private List<JabatanPegawaiModel> jabatan;
 
 	public List<JabatanPegawaiModel> getJabatan() {

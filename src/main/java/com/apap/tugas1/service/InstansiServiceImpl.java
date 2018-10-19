@@ -2,6 +2,7 @@ package com.apap.tugas1.service;
 
 import com.apap.tugas1.model.InstansiModel;
 import com.apap.tugas1.model.PegawaiModel;
+import com.apap.tugas1.model.ProvinsiModel;
 import com.apap.tugas1.repository.*;
 
 import java.math.BigInteger;
@@ -29,6 +30,12 @@ public class InstansiServiceImpl implements InstansiService{
 	public List<InstansiModel> getAllInstansi() {
 		// TODO Auto-generated method stub
 		return InstansiDb.findAll();
+	}
+
+	@Override
+	public List<InstansiModel> getAllInstansiByProvinsi(ProvinsiModel provinsi) {
+		// TODO Auto-generated method stub
+		return InstansiDb.findAllInstansiByProvinsi(provinsi);
 	}
 
 	

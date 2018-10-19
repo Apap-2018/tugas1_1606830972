@@ -10,10 +10,92 @@
 		
 		<div class="container-fluid">
 			<h2>Ubah Pegawai</h2>
-			<form th:action="@{/pegawai/ubah}" method="POST">
-				<input type="text" name="pegawaiNip" class="form-control"/>
-				<button type="submit" class="btn btn-primary">Cari</button>
+			<form th:action="@{/pegawai/ubah}" th:object=${pegawai} method="POST">
+				<input type="hidden" name = "nip" th:value="${pegawai.nip}">
+				<table>
+					<tr>
+						<td>Nama</td>
+						<td><input type="text" name="nama" th:value="${pegawai.nama}" class="form-control"/></td>
+					</tr>
+					<tr>
+						<td>Tempat Lahir</td>
+						<td><input type="text" name="tempat_lahir" th:value="${pegawai.tempat_lahir}" class="form-control"/></td>
+					</tr>
+					<tr>
+						<td>Tanggal Lahir</td>
+						<td><input type="Date" name="tanggal_lahir" th:value="${pegawai.tanggal_lahir}" class="form-control"/></td>
+					</tr>
+					<tr>
+						<td>Tahun Masuk</td>
+						<td><input type="number" name="tahun_masuk" th:value="${pegawai.tahun_masuk}" class="form-control"/></td>
+					</tr>
+					<tr>
+		                <td>Provinsi</td>
+		                <td>
+		                    <select  class="form-control" required="required" 
+						       name="provinsi" id="provinsi">
+						      <option disabled="disabled" selected="selected" > -- 
+						      Pilih Provinsi --
+						      </option>
+						      <option th:each="provinsi : ${listProvinsi}" th:value="${provinsi.id}" 
+						       th:text="${provinsi.nama}" >
+						      </option>
+						    </select>
+		                </td>
+		            </tr>
+		            <tr>
+		                <td>Nama Instansi</td>
+		                <td>
+		                    <select  class="form-control" required="required" 
+						       name="instansi.id" id="instansi">
+						      <option disabled="disabled" selected="selected" > -- 
+						      Pilih Instansi --
+						      </option>
+						      <option th:each="instansi : ${listInstansi}" th:value="${instansi.id}" 
+						       th:text="${instansi.nama}" >
+						      </option>
+						    </select>
+		                </td>
+		            </tr>
+		            <tr>
+		            	<td>Jabatan</td>
+		            	<td th:each="jabatanPegawai, statusJabatan : *{jabatan}">
+		            		<select class="form-control" required="required" th:field="*{jabatan[__${statusJabatan.index}__].jabatan}">
+							    <option th:each="jabatan, status : ${listJabatan}" th:value="${jabatan.id}" th:text="${jabatan.nama}">-- 
+						      Pilih Jabatan --</option>
+							</select>
+		            	</td>
+		            </tr>
+		            <tr>
+			            <td></td>
+			            <td><button type="submit" name="addJabatan">Tambah Jabatan</button></td>
+		            </tr>
+		            <tr>
+		                <td><button type="submit" class="btn btn-primary">Ubah</button><td>
+		            </tr>
+				</table>
 			</form>
 		</div>
 	</body>
+	<script th:inline="javascript">
+$('#provinsi').change(
+        function() {
+        	console.log("ayam")
+            $.getJSON("/pegawai/instansi", {
+                idProvinsi : $(this).val(),
+                ajax : 'true'
+            }, function(data) {
+            	console.log("ayam betutu");
+            	var html = '<option value="">--Pilih Instansi--</option>';
+                var len = data.length;
+                for ( var i = 0; i < len; i++) {
+                    html += '<option value="' + data[i].id + '">'
+                            + data[i].nama + '</option>';
+                }
+                html += '</option>';
+                $('#instansi').html(html);
+            });
+        	console.log("papaprapap");
+        });
+</script>
 </html>
