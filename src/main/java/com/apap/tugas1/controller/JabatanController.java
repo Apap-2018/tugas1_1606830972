@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.apap.tugas1.model.JabatanModel;
 import com.apap.tugas1.model.JabatanPegawaiModel;
@@ -37,10 +38,13 @@ public class JabatanController {
 	}
 	
 	@RequestMapping(value = "/jabatan/tambah", method = RequestMethod.POST)
-	private String tambahJabatanSubmit(@ModelAttribute JabatanModel jabatan, Model model) {
+	private String tambahJabatanSubmit(@ModelAttribute JabatanModel jabatan, Model model, RedirectAttributes redirectAttrs) {
 		jabatanService.addJabatan(jabatan);
 		model.addAttribute("jabatan", jabatan);
-		return "submit-jabatan";
+		redirectAttrs.addAttribute("id", jabatan.getId());
+		redirectAttrs.addFlashAttribute("message", "SUKSES! Berhasil menambah jabatan");
+		redirectAttrs.addFlashAttribute("alertClass", "alert-success");
+		return "redirect:/jabatan/view?jabatanId={id}";
 	}
 	
 	@RequestMapping(value="/jabatan/view", method=RequestMethod.GET)
@@ -61,10 +65,13 @@ public class JabatanController {
 	}
 
 	@RequestMapping(value="/jabatan/ubah", method=RequestMethod.POST)
-	private String ubahJabatanSubmit(@ModelAttribute JabatanModel jabatan, Model model) {
+	private String ubahJabatanSubmit(@ModelAttribute JabatanModel jabatan, Model model, RedirectAttributes redirectAttrs) {
 		jabatanService.updateJabatan(jabatan, jabatan.getId());
 		model.addAttribute("jabatan", jabatan);
-		return "ubah";
+		redirectAttrs.addAttribute("id", jabatan.getId());
+		redirectAttrs.addFlashAttribute("message", "SUKSES! Berhasil merubah jabatan");
+		redirectAttrs.addFlashAttribute("alertClass", "alert-success");
+		return "redirect:/jabatan/view?jabatanId={id}";
 	}
 	
 	@RequestMapping(value="/jabatan/viewall")

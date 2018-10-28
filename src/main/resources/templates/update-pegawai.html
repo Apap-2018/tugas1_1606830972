@@ -11,6 +11,7 @@
 		<div class="container-fluid">
 			<h2>Ubah Pegawai</h2>
 			<form th:action="@{/pegawai/ubah}" th:object=${pegawai} method="POST">
+				<input type="hidden" name = "id" th:value="${pegawai.id}">
 				<input type="hidden" name = "nip" th:value="${pegawai.nip}">
 				<table>
 					<tr>
@@ -34,11 +35,11 @@
 		                <td>
 		                    <select  class="form-control" required="required" 
 						       name="provinsi" id="provinsi">
-						      <option disabled="disabled" selected="selected" > -- 
+						      <option disabled="disabled" selected="selected"> -- 
 						      Pilih Provinsi --
 						      </option>
 						      <option th:each="provinsi : ${listProvinsi}" th:value="${provinsi.id}" 
-						       th:text="${provinsi.nama}" >
+						       th:text="${provinsi.nama}" th:selected="${provinsi.id==pegawai.instansi.provinsi.id}">
 						      </option>
 						    </select>
 		                </td>
@@ -47,24 +48,37 @@
 		                <td>Nama Instansi</td>
 		                <td>
 		                    <select  class="form-control" required="required" 
-						       name="instansi.id" id="instansi">
-						      <option disabled="disabled" selected="selected" > -- 
+						       name="instansi" id="instansi" th:value="*{instansi}">
+						      <option disabled="disabled" selected="selected"> -- 
 						      Pilih Instansi --
 						      </option>
 						      <option th:each="instansi : ${listInstansi}" th:value="${instansi.id}" 
-						       th:text="${instansi.nama}" >
+						       th:text="${instansi.nama}" th:selected="${instansi.id==pegawai.instansi.id}">
 						      </option>
 						    </select>
 		                </td>
 		            </tr>
 		            <tr>
 		            	<td>Jabatan</td>
-		            	<td th:each="jabatanPegawai, statusJabatan : *{jabatan}">
+		            	<td>
+		            		<div class="form-group" th:each="jabatanP, rowStat : *{jabatan}">
+								<select class="form-control" th:field="*{jabatan[__${rowStat.index}__].jabatan}">
+									<option th:each="jabatan : ${listJabatan}" th:value="${jabatan.id}" th:text="${jabatan.nama}" ></option>
+								</select>
+								<!-- <select name="jabatan" id="jabatan" form="pegawaiForm">
+									<option th:each="jabatan : ${listJabatan}" th:field="*{jabatan[__${rowStat.index}__].jabatan}" th:value="${jabatan.id}" th:text="${jabatan.nama}"></option>
+								</select> -->
+								
+								<button type="submit" name="removeRow" 
+		                					th:value="${rowStat.index}" class="btn btn-danger btn-sm">Hapus</button>
+							</div>
+		            	</td>
+		            	<!-- <td th:each="jabatanPegawai, statusJabatan : *{jabatan}">
 		            		<select class="form-control" required="required" th:field="*{jabatan[__${statusJabatan.index}__].jabatan}">
 							    <option th:each="jabatan, status : ${listJabatan}" th:value="${jabatan.id}" th:text="${jabatan.nama}">-- 
 						      Pilih Jabatan --</option>
 							</select>
-		            	</td>
+		            	</td> -->
 		            </tr>
 		            <tr>
 			            <td></td>
@@ -77,25 +91,46 @@
 			</form>
 		</div>
 	</body>
-	<script th:inline="javascript">
-$('#provinsi').change(
-        function() {
-        	console.log("ayam")
-            $.getJSON("/pegawai/instansi", {
-                idProvinsi : $(this).val(),
-                ajax : 'true'
-            }, function(data) {
-            	console.log("ayam betutu");
-            	var html = '<option value="">--Pilih Instansi--</option>';
-                var len = data.length;
-                for ( var i = 0; i < len; i++) {
-                    html += '<option value="' + data[i].id + '">'
-                            + data[i].nama + '</option>';
-                }
-                html += '</option>';
-                $('#instansi').html(html);
-            });
-        	console.log("papaprapap");
-        });
-</script>
+	<script type="text/javascript">
+	$(document).ready(function () {
+	    $("#provinsi").change(function () {
+	 
+	            $.getJSON("/instansi", {
+	                provinsiId : $(this).val(),
+	                ajax : 'true'
+	            }, function(data) {
+	                var html = '';
+	                var len = data.length;
+	                for ( var i = 0; i < len; i++) {
+	                    html += '<option value="' + data[i].id + '">'
+	                            + data[i].nama + '</option>';
+	                }
+	                html += '';
+	                console.log("berhasil");
+	                $('#instansi').html(html);
+	            });
+	    });    
+	        
+	});
+	</script>
+	<!-- <script th:inline="javascript">
+	 $('#provinsi').change(
+		        function() {
+		        	console.log("masuk 1")
+		            $.getJSON("/instansi", {
+		                provinsiId : $(this).val(),
+		                ajax : 'true'
+		            }, function(data) {
+		            	console.log("masuk 2")
+		                var html = '<option disabled="disabled" selected="selected">--Pilih Instansi--</option>';
+		                var len = data.length;
+		                for ( var i = 0; i < len; i++) {
+		                    html += '<option value="' + data[i].id + '">'
+		                            + data[i].nama + '</option>';
+		                }
+		                html += '</option>';
+		                $('#instansi').html(html);
+		            });
+		        });
+</script> -->
 </html>

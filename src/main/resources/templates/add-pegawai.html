@@ -15,27 +15,28 @@
 		
 		<div class="container-fluid">
 			<h2>Tambah Pegawai</h2>
-			<form th:action="@{/pegawai/tambah}" th:object=${pegawai} method="POST">
+			<form th:action="@{/pegawai/tambah}" id="pegawaiForm" th:object=${pegawai} method="POST">
 				<table>
 					<tr>
 						<td>Nama</td>
-						<td><input type="text" name="nama" class="form-control"/></td>
+						<td><input type="text" name="nama" class="form-control" th:value="*{nama}"/></td>
 					</tr>
 					<tr>
 						<td>Tempat Lahir</td>
-						<td><input type="text" name="tempat_lahir" class="form-control"/></td>
+						<td><input type="text" name="tempat_lahir" class="form-control" th:value="*{tempat_lahir}"/></td>
 					</tr>
 					<tr>
 						<td>Tanggal Lahir</td>
-						<td><input type="Date" name="tanggal_lahir" class="form-control"/></td>
+						<td><input type="date" name="tanggal_lahir" class="form-control" th:value="${tanggalLahir}"/></td>
 					</tr>
 					<tr>
 						<td>Tahun Masuk</td>
-						<td><input type="number" name="tahun_masuk" class="form-control"/></td>
+						<td><input type="number" name="tahun_masuk" class="form-control" th:value="*{tahun_masuk}"/></td>
 					</tr>
 					<tr>
 		                <td>Provinsi</td>
 		                <td>
+		                	
 		                    <select  class="form-control" required="required" 
 						       name="provinsi" id="provinsi">
 						      <option disabled="disabled" selected="selected" > -- 
@@ -63,21 +64,25 @@
 		            </tr>
 		            <tr>
 		            	<td>Jabatan</td>
-		            	<td th:each="jabatanPegawai, statusJabatan : *{jabatan}">
+		            	<td>
+		            		<div class="form-group" th:each="jabatanP, rowStat : *{jabatan}">
+								<select class="form-control" th:field="*{jabatan[__${rowStat.index}__].jabatan}">
+									<option th:each="jabatan : ${listJabatan}" th:value="${jabatan.id}" th:text="${jabatan.nama}" ></option>
+								</select>
+								<!-- <select name="jabatan" id="jabatan" form="pegawaiForm">
+									<option th:each="jabatan : ${listJabatan}" th:field="*{jabatan[__${rowStat.index}__].jabatan}" th:value="${jabatan.id}" th:text="${jabatan.nama}"></option>
+								</select> -->
+								
+								<button type="submit" name="removeRow" 
+		                					th:value="${rowStat.index}" class="btn btn-danger btn-sm">Hapus</button>
+							</div>
+		            	</td>
+		            	<!-- <td th:each="jabatanPegawai, statusJabatan : *{jabatan}">
 		            		<select class="form-control" required="required" th:field="*{jabatan[__${statusJabatan.index}__].jabatan}">
 							    <option th:each="jabatan, status : ${listJabatan}" th:value="${jabatan.id}" th:text="${jabatan.nama}">-- 
 						      Pilih Jabatan --</option>
 							</select>
-		            		<!-- <select  class="form-control" required="required" 
-						       th:value="${listJabatan}" name="jabatan" id="jabatan">
-						      <option disabled="disabled" selected="selected" > -- 
-						      Pilih Jabatan --
-						      </option>
-						      <option th:each="jabatan : ${listJabatan}" th:value="${jabatan.id}" 
-						       th:text="${jabatan.nama}" >
-						      </option>
-						    </select> -->
-		            	</td>
+		            	</td> -->
 		            </tr>
 		            <tr>
 			            <td></td>
@@ -112,7 +117,7 @@
 			                ajax : 'true'
 			            }, function(data) {
 			            	console.log("masuk 2")
-			                var html = '<option value="">--Pilih Instansi--</option>';
+			                var html = '<option disabled="disabled" selected="selected">--Pilih Instansi--</option>';
 			                var len = data.length;
 			                for ( var i = 0; i < len; i++) {
 			                    html += '<option value="' + data[i].id + '">'

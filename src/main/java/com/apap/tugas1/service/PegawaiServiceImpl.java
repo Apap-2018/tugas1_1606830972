@@ -19,6 +19,9 @@ import org.springframework.stereotype.Service;
 public class PegawaiServiceImpl implements PegawaiService{
 	@Autowired
 	private PegawaiDb PegawaiDb;
+	
+	@Autowired
+	private JabatanPegawaiDb jabatanPegawaiDb;
 
 	@Override
 	public Optional<PegawaiModel> getPegawaiByNIP(Long NIP) {
@@ -72,17 +75,25 @@ public class PegawaiServiceImpl implements PegawaiService{
 	}
 
 	@Override
-	public void updatePegawai(PegawaiModel pegawai) {
+	public void updatePegawai(PegawaiModel pegawaiLama, PegawaiModel pegawaiBaru) {
 		// TODO Auto-generated method stub
-		PegawaiModel pegawaiUpdate = PegawaiDb.getOne(pegawai.getId());
-		pegawaiUpdate.setNama(pegawai.getNama());
-		pegawaiUpdate.setNip(pegawai.getNip());
-		pegawaiUpdate.setTahun_masuk(pegawai.getTahun_masuk());
-		pegawaiUpdate.setTanggal_lahir(pegawai.getTanggal_lahir());
-		pegawaiUpdate.setTempat_lahir(pegawai.getTempat_lahir());
-		pegawaiUpdate.setJabatan(pegawai.getJabatan());
-		pegawaiUpdate.setInstansi(pegawai.getInstansi());
-		PegawaiDb.save(pegawaiUpdate);
+		pegawaiBaru.setNama(pegawaiLama.getNama());
+		pegawaiBaru.setNip(pegawaiLama.getNip());
+		pegawaiBaru.setTahun_masuk(pegawaiLama.getTahun_masuk());
+		pegawaiBaru.setTanggal_lahir(pegawaiLama.getTanggal_lahir());
+		pegawaiBaru.setTempat_lahir(pegawaiLama.getTempat_lahir());
+//		pegawaiUpdate.setJabatan(pegawai.getJabatan());
+		pegawaiBaru.setInstansi(pegawaiLama.getInstansi());
+		int jumlahList = pegawaiLama.getJabatan().size();
+		for (int i = 0; i< jumlahList; i++) {
+			pegawaiLama.getJabatan().get(i).setJabatan(pegawaiBaru.getJabatan().get(i).getJabatan());
+		}
+		
+		for (int i = jumlahList; i < pegawaiBaru.getJabatan().size(); i++) {
+			pegawaiBaru.getJabatan().get(i).setPegawai(pegawaiLama);
+			jabatanPegawaiDb.save(pegawaiBaru.getJabatan().get(i));
+		}
+		PegawaiDb.save(pegawaiBaru);
 	}
 
 //	@Override

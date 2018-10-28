@@ -7,6 +7,7 @@
 	</head>
 	<body>
 		<nav th:replace="fragments/fragment :: navbar"></nav>
+		<div th:if="${message}" th:text="${message}" th:class="${'alert ' + alertClass}"></div>
 		
 		<h1>Detail Jabatan</h1>
 		<table>
@@ -20,7 +21,7 @@
 			</tr>
 			<tr>
 				<td>Gaji Pokok</td>
-				<td th:text="${jabatan.gaji_pokok}"></td>
+				<td th:text="'Rp '+${jabatan.gaji_pokok}"></td>
 			</tr>
 			<tr>
 				<td>Jumlah Pegawai</td>
@@ -28,14 +29,24 @@
 			</tr>
 		</table>
 		
-		<form th:action="@{'/jabatan/ubah'}" method="GET">
-			<input type="hidden" th:value="${jabatan.id}" name="jabatanId" />
-			<button value="submit">Ubah</button>
-		</form>
+		<table>
+			<tr>
+				<td>
+					<form th:action="@{'/jabatan/ubah'}" method="GET">
+						<input type="hidden" th:value="${jabatan.id}" name="jabatanId" />
+						<button value="submit" class="btn btn-primary">Ubah</button>
+					</form>
+				</td>
+				<td>
+					<form th:action="@{'/jabatan/hapus'}" method="POST">
+						<input type="hidden" th:value="${jabatan.id}" name="jabatanId" />
+						<button value="submit" class="btn btn-primary">Hapus</button>
+					</form>
+				</td>
+			</tr>
+		</table>
 		
-		<form th:action="@{'/jabatan/hapus'}" method="POST">
-			<input type="hidden" th:value="${jabatan.id}" name="jabatanId" />
-			<button value="submit">Hapus</button>
-		</form>
+		
+
 	</body>
 </html>

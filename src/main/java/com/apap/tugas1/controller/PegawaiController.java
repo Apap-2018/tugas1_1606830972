@@ -7,13 +7,19 @@ import com.apap.tugas1.model.PegawaiModel;
 import com.apap.tugas1.model.ProvinsiModel;
 import com.apap.tugas1.service.*;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -64,16 +70,23 @@ public class PegawaiController {
 		
 	}
 	
-	@RequestMapping("/pegawai/tambah")
+	@RequestMapping(value="/pegawai/tambah", method=RequestMethod.GET)
 	private String tambahPegawai(Model model) {
 		PegawaiModel pegawai = new PegawaiModel();
 		pegawai.setJabatan(new ArrayList<JabatanPegawaiModel>());
-		JabatanPegawaiModel jp = new JabatanPegawaiModel();
-		jp.setPegawai(pegawai);
-		pegawai.getJabatan().add(jp);
+		List<JabatanPegawaiModel> jp = new ArrayList<JabatanPegawaiModel>();
+		pegawai.setJabatan(jp);
+		
+		JabatanPegawaiModel jabatanPegawai = new JabatanPegawaiModel();
+		jabatanPegawai.setPegawai(pegawai);
+		pegawai.getJabatan().add(jabatanPegawai);
+
 		List<ProvinsiModel> listProvinsi = provinsiService.getAllProvinsi();
 		List<InstansiModel> listInstansi = instansiService.getAllInstansi();
 		List<JabatanModel> listJabatan = jabatanService.getAll();
+		DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+		Date date = new Date();
+		model.addAttribute("tanggalLahir", dateFormat.format(date));
 		model.addAttribute("pegawai", pegawai);
 		model.addAttribute("listJabatan", listJabatan);
 		model.addAttribute("listProvinsi", listProvinsi);
@@ -82,18 +95,32 @@ public class PegawaiController {
 		
 	}
 	
+	@InitBinder
+	protected void initBinder(WebDataBinder binder) {
+	    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+	    binder.registerCustomEditor(Date.class, new CustomDateEditor(
+	            dateFormat, false));
+	}
+	
 	@RequestMapping(value="/pegawai/tambah", method=RequestMethod.POST, params={"addJabatan"})
 	public String addRowJabatan(@ModelAttribute PegawaiModel pegawai, Model model) {
-		PegawaiModel pegawaiNew = pegawai;
+//		PegawaiModel pegawaiNew = pegawai;
 		
 		JabatanPegawaiModel jabatan = new JabatanPegawaiModel();
-		jabatan.setPegawai(pegawaiNew);
-		pegawaiNew.getJabatan().add(jabatan);
+		jabatan.setPegawai(pegawai);
+		pegawai.getJabatan().add(jabatan);
 		
 		List<ProvinsiModel> listProvinsi = provinsiService.getAllProvinsi();
 		
+		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+		String tanggalLahir = simpleDateFormat.format(pegawai.getTanggal_lahir());
+		model.addAttribute("tanggalLahir", tanggalLahir);
+		
+//		ProvinsiModel provinsi = pegawai.getInstansi().getProvinsi();
+//		List<InstansiModel> listInstansi = provinsi.getListInstansi();
 		List<InstansiModel> listInstansi = new ArrayList<InstansiModel>();
 		listInstansi = listProvinsi.get(0).getListInstansi();
+		model.addAttribute("listInstansi", listInstansi);
 		
 		List<JabatanModel> listJabatan = jabatanService.getAll();
 		
@@ -126,10 +153,11 @@ public class PegawaiController {
 		
 		//menambahkan jabatan pegawai ke jabatanpegawaimodel
 		for(JabatanPegawaiModel jabatan : listJabPegawai) {
+			System.out.println(jabatan.getId());
 			jabatan.setPegawai(pegawai);
 			jabatanPegawaiService.addJabatanPegawai(jabatan);
-			
 		}
+		
 		model.addAttribute("penambahan", "Pegawai");
 		return "add";
 	}
@@ -142,9 +170,11 @@ public class PegawaiController {
 		
 	}
 	
-	@RequestMapping(value="/pegawai/ubah")
+	@RequestMapping(value="/pegawai/ubah", method=RequestMethod.GET)
 	private String ubahPegawai(@RequestParam(value="pegawaiNip") String nip, Model model) {
 		PegawaiModel pegawai = pegawaiService.getPegawaiByNIP(Long.parseLong(nip)).get();
+		
+		System.out.println(pegawai.getNip());
 		
 		List<ProvinsiModel> listProvinsi = provinsiService.getAllProvinsi();
 		List<InstansiModel> listInstansi = instansiService.getAllInstansi();
@@ -160,9 +190,49 @@ public class PegawaiController {
 		
 	}
 	
+	@RequestMapping(value="/pegawai/ubah", method=RequestMethod.POST, params={"addJabatan"})
+	public String addRowJabatanUpdate(@ModelAttribute PegawaiModel pegawai, Model model) {
+//		PegawaiModel pegawaiNew = pegawai;
+		
+		JabatanPegawaiModel jabatan = new JabatanPegawaiModel();
+		jabatan.setPegawai(pegawai);
+		pegawai.getJabatan().add(jabatan);
+		
+		List<ProvinsiModel> listProvinsi = provinsiService.getAllProvinsi();
+		
+		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+		String tanggalLahir = simpleDateFormat.format(pegawai.getTanggal_lahir());
+		model.addAttribute("tanggalLahir", tanggalLahir);
+		
+//		ProvinsiModel provinsi = pegawai.getInstansi().getProvinsi();
+//		List<InstansiModel> listInstansi = provinsi.getListInstansi();
+		List<InstansiModel> listInstansi = new ArrayList<InstansiModel>();
+		listInstansi = listProvinsi.get(0).getListInstansi();
+		model.addAttribute("listInstansi", listInstansi);
+		
+		List<JabatanModel> listJabatan = jabatanService.getAll();
+		
+		
+/*		System.out.println(pegawai.getJabatan().get(0));
+		pegawai.getJabatan().add(new JabatanPegawaiModel());*/
+		model.addAttribute("pegawai", pegawai);
+		
+//		List<ProvinsiModel> listProvinsi = provinsiService.getAllProvinsi();
+		model.addAttribute("listProvinsi", listProvinsi);
+		
+//		List<JabatanModel> listJabatan = jabatanService.getAll();
+		model.addAttribute("listJabatan", listJabatan);
+	    return "update-pegawai";
+	}
+	
 	@RequestMapping(value="/pegawai/ubah", method=RequestMethod.POST)
-	private String ubahPegawaiSubmit(@ModelAttribute PegawaiModel pegawai) {
-		pegawaiService.updatePegawai(pegawai);
+	private String ubahPegawaiSubmit(@ModelAttribute PegawaiModel pegawai, Model model) {
+		PegawaiModel pegawaiLama = pegawaiService.getPegawaiByNIP(Long.parseLong(pegawai.getNip())).get();
+		String nip = pegawaiService.generateNip(pegawai);
+		pegawai.setNip(nip);
+		
+		pegawaiService.updatePegawai(pegawaiLama, pegawai);
+		model.addAttribute("pegawai", pegawai);
 		return "update";
 	}
 	

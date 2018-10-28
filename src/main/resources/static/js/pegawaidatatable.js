@@ -17,6 +17,7 @@ $(document).ready( function () {
 				  { "mData": "tanggal_lahir" },
 				  { "mData": "tahun_masuk" },
 				  { "mData": "instansi.nama"},
+				  { "mData": "jabatan.nama"},
 				  
 				  
 			]

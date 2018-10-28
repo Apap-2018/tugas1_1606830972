@@ -21,7 +21,8 @@ public class InstansiController {
 	
 	@RequestMapping(value="/instansi", method=RequestMethod.GET)
 	public @ResponseBody List<InstansiModel> findAllInstansi(@RequestParam(value= "provinsiId", required=true) Long provinsiId){
-		List<InstansiModel> listInstansi = provinsiService.getProvinsiById(provinsiId).get().getListInstansi();
+		ProvinsiModel provinsi = provinsiService.getProvinsiById(provinsiId).get();
+		List<InstansiModel> listInstansi = instansiService.getAllInstansiByProvinsi(provinsi);
 		return listInstansi;
 	}
 

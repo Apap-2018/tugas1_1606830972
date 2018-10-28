@@ -18,6 +18,8 @@ import javax.validation.constraints.Size;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 @Table(name="jabatan")
 public class JabatanModel implements Serializable{
@@ -73,6 +75,7 @@ public class JabatanModel implements Serializable{
 
 	@OneToMany(mappedBy="jabatan", fetch=FetchType.LAZY)
 	@OnDelete(action= OnDeleteAction.CASCADE)
+	@JsonIgnore
 	private List<JabatanPegawaiModel> listPegawai;
 
 	public List<JabatanPegawaiModel> getListPegawai() {

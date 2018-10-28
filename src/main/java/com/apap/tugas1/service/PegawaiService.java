@@ -19,6 +19,6 @@ public interface PegawaiService {
 	
 	String generateNip(PegawaiModel pegawai);
 	
-	void updatePegawai(PegawaiModel pegawai);
+	void updatePegawai(PegawaiModel pegawaiLama, PegawaiModel pegawaiBaru);
 
 }
