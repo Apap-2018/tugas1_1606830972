@@ -1,5 +1,6 @@
 package com.apap.tugas1.service;
 
+import java.util.List;
 import java.util.Optional;
 
 import com.apap.tugas1.model.InstansiModel;
@@ -20,5 +21,9 @@ public interface PegawaiService {
 	String generateNip(PegawaiModel pegawai);
 	
 	void updatePegawai(PegawaiModel pegawaiLama, PegawaiModel pegawaiBaru);
+	
+	List<PegawaiModel> findPegawaiByInstansiAndJabatan(InstansiModel instansi, JabatanModel jabatan);
+	
+	List<PegawaiModel> findPegawaiByProvinsiAndJabatan(List<PegawaiModel> pegawaiProvinsi,JabatanModel jabatan);
 
 }

@@ -2,10 +2,12 @@ package com.apap.tugas1.service;
 
 import com.apap.tugas1.model.InstansiModel;
 import com.apap.tugas1.model.JabatanModel;
+import com.apap.tugas1.model.JabatanPegawaiModel;
 import com.apap.tugas1.model.PegawaiModel;
 import com.apap.tugas1.repository.*;
 
 import java.sql.Date;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -94,6 +96,39 @@ public class PegawaiServiceImpl implements PegawaiService{
 			jabatanPegawaiDb.save(pegawaiBaru.getJabatan().get(i));
 		}
 		PegawaiDb.save(pegawaiBaru);
+	}
+
+	@Override
+	public List<PegawaiModel> findPegawaiByInstansiAndJabatan(InstansiModel instansi, JabatanModel jabatan) {
+		// TODO Auto-generated method stub
+		List<PegawaiModel> pegawaiInstansi = instansi.getListPegawai();
+		List<PegawaiModel> pencarian = new ArrayList<>();
+		long idJabatan = jabatan.getId();
+		
+		for(PegawaiModel peg : pegawaiInstansi) {
+			for(JabatanPegawaiModel jab: peg.getJabatan()) {
+				if(jab.getJabatan().getId() == idJabatan) {
+					pencarian.add(peg);
+				}
+			}
+		}
+		return pencarian;
+	}
+
+	@Override
+	public List<PegawaiModel> findPegawaiByProvinsiAndJabatan(List<PegawaiModel> pegawaiProvinsi,
+			JabatanModel jabatan) {
+		// TODO Auto-generated method stub
+		List<PegawaiModel> pencarian = new ArrayList<>();
+		
+		for(PegawaiModel peg: pegawaiProvinsi) {
+			for(JabatanPegawaiModel jab: peg.getJabatan()) {
+				if(jab.getJabatan().getId() == jabatan.getId()) {
+					pencarian.add(peg);
+				}
+			}
+		}
+		return pencarian;
 	}
 
 //	@Override

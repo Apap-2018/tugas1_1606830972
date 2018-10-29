@@ -9,7 +9,7 @@
 		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 		<link rel="stylesheet" href="https://cdn.datatables.net/1.10.12/css/jquery.dataTables.min.css">
 		<script src="https://cdn.datatables.net/1.10.12/js/jquery.dataTables.min.js"></script>
-		<script src="/js/pegawaidatatable.js"></script>
+		<!-- <script src="/js/pegawaidatatable.js"></script> -->
 	</head>
 	<body>
 		<nav th:replace="fragments/fragment :: navbar"></nav>
@@ -26,7 +26,7 @@
               	<form th:action="@{/pegawai/cari}" method="GET">
 				    <div class="form-group">
 					    <label for="location">Provinsi:</label>
-					    <select  class="form-control" required="required" name="idProvinsi" id="provinsi">
+					    <select  class="form-control" name="idProvinsi" id="provinsi">
 					      <option disabled="disabled" selected="selected" > -- Pilih Provinsi -- </option>
 					      <option th:each="provinsi : ${listProvinsi}" th:value="${provinsi.id}" 
 					      th:text="${provinsi.nama}"></option>
@@ -34,7 +34,7 @@
 					</div>
 					<div class="form-group">
 				       <label for="location">Instansi:</label>
-				       <select class="form-control" name="idInstansi" id="instansi" required="required">
+				       <select class="form-control" name="idInstansi" id="instansi">
 				       			 <option disabled="disabled" selected="selected" > -- Pilih Instansi -- </option>
 				           
 				       </select>
@@ -42,7 +42,7 @@
 					  
 					<div class="form-group">
 				       <label for="location">Jabatan:</label>
-				       <select class="form-control" name="idJabatan" id="jabatan" required="required">
+				       <select class="form-control" name="idJabatan" id="jabatan">
 				       		<option disabled="disabled" selected="selected" > -- Pilih Jabatan -- </option>
 				           	<option th:each="jabatan : ${listJabatan}" th:value="${jabatan.id}" 
 					      th:text="${jabatan.nama}"></option>	
@@ -68,11 +68,31 @@
 	                <th>Jabatan</th>
 	            </tr>
 	        </thead>
+	        <tbody>
+	        	<tr th:each="pegawai : *{listPencarian}">
+					<td th:text="${pegawai.nip}"></td>
+					<td th:text="${pegawai.nama}"></td>
+					<td th:text="${pegawai.tempat_lahir}"></td>
+					<td th:text="${pegawai.tanggal_lahir}"></td>
+					<td th:text="${pegawai.tahun_masuk}"></td>
+					<td th:text="${pegawai.instansi.nama} + '-' + ${pegawai.instansi.provinsi.nama}"></td>
+					<td>
+						<ol>
+							<li th:each="jabatan: ${pegawai.jabatan}" th:text="${jabatan.jabatan.nama}"></li>
+						</ol>
+					</td>
+				</tr>
+	        </tbody>
 	    </table>
     </div>	
 	</body>
 	<script th:inline="javascript">
-$('#provinsi').change(
+	
+	$(document).ready(function() {
+	    $('#pegawaiTable').DataTable();
+	} );
+	
+	$('#provinsi').change(
         function() {
         	console.log("ayam")
             $.getJSON("/pegawai/instansi", {

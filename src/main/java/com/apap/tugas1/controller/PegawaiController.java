@@ -253,20 +253,47 @@ public class PegawaiController {
 		model.addAttribute("listProvinsi",listProvinsi);
 		model.addAttribute("listJabatan", listJabatan);
 		
+		List<PegawaiModel> pegawai= null;
 		if(idProvinsi.isPresent()) {
 			ProvinsiModel provinsi = provinsiService.getProvinsiById(Long.parseLong(idProvinsi.get())).get();
 			if(idInstansi.isPresent()) {
 				InstansiModel instansi = instansiService.getIntansiById(Long.parseLong(idInstansi.get())).get();
-				List<PegawaiModel> pegawaiInstansi = instansi.getListPegawai();
 				if(idJabatan.isPresent()) {
 					JabatanModel jabatan = jabatanService.getJabatanById(Long.parseLong(idJabatan.get())).get();
+					pegawai = pegawaiService.findPegawaiByInstansiAndJabatan(instansi, jabatan);
 				}
 				else {
-					
+					pegawai = instansi.getListPegawai();
+				}
+			} else {
+				List<InstansiModel> instansi = provinsi.getListInstansi();
+				pegawai = instansi.get(0).getListPegawai();
+				for(int x = 1;x < instansi.size();x++) {
+					List<PegawaiModel> pegProv = instansi.get(x).getListPegawai();
+					for(PegawaiModel peg:pegProv) {
+						pegawai.add(peg);
+					}
+				}
+				
+				if (idJabatan.isPresent()) {
+					JabatanModel jabatan = jabatanService.getJabatanById(Long.parseLong(idJabatan.get())).get();
+					pegawai = pegawaiService.findPegawaiByProvinsiAndJabatan(pegawai, jabatan);
 				}
 			}
 			
+		} else {
+			if(idJabatan.isPresent()) {
+				JabatanModel jabatan = jabatanService.getJabatanById(Long.parseLong(idJabatan.get())).get();
+				List<JabatanPegawaiModel> jabatanpeg = jabatan.getListPegawai();
+				List<PegawaiModel> pegawailist = new ArrayList<>();
+				for(JabatanPegawaiModel jabpeg: jabatanpeg) {
+					pegawailist.add(jabpeg.getPegawai());
+				}
+				pegawai = pegawailist;
+			}
+			
 		}
+		model.addAttribute("listPencarian", pegawai);
 		return "cari-pegawai";
 	}
 	
